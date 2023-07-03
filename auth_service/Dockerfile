@@ -1,15 +1,21 @@
-FROM golang:latest as builder
-WORKDIR /app
-COPY ./auth_service/go.mod ./auth_service/go.sum ./
-RUN go mod download
-COPY ./auth_service/ .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+FROM golang:alpine AS build
 
-FROM alpine:latest
-WORKDIR /root/
-COPY --from=builder /app/main .
-COPY /rbac/auth_model.conf/ .
-COPY /auth_service/policy.csv .
-COPY /auth_service/blacklist.txt .
+WORKDIR /app
+COPY . .
+
+RUN go mod download && go mod verify
+RUN go build -v -o /app/bin/app .
+
+FROM gcr.io/distroless/base-debian11 as release-debian
+
+WORKDIR /
+COPY --from=build /app/bin/app /app
+COPY /rbac/auth_model.conf/ \
+     /auth_service/policy.csv \
+     /auth_service/blacklist.txt \
+     ./
+     
+RUN chmod 600 auth_model.conf
 EXPOSE 8000
-CMD ["./main"]
+USER nonroot:nonroot
+ENTRYPOINT ["/app"]
