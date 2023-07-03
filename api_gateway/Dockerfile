@@ -1,16 +1,17 @@
-FROM nginx:1.18
+FROM nginx:stable-alpine3.17-slim
 
-COPY ./api_gateway.conf /etc/nginx/conf.d/api_gateway.conf
-COPY ./cert /etc/nginx/cert
 RUN rm /etc/nginx/conf.d/default.conf
 
-RUN apt-get update \
-    && apt-get install -y unzip \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache unzip
+
+RUN adduser -D -g 'nginx' nginx
+
+COPY api_gateway.conf /etc/nginx/conf.d/api_gateway.conf
+COPY cert /etc/nginx/cert
+COPY opentelemetry_module.conf /etc/nginx/conf.d/
 
 WORKDIR /opt
-
-RUN curl -LOJ https://github.com/open-telemetry/opentelemetry-cpp-contrib/releases/download/webserver%2Fv1.0.0/opentelemetry-webserver-sdk-x64-linux.tgz.zip \
+RUN wget -O opentelemetry-webserver-sdk-x64-linux.tgz.zip https://github.com/open-telemetry/opentelemetry-cpp-contrib/releases/download/webserver%2Fv1.0.0/opentelemetry-webserver-sdk-x64-linux.tgz.zip \
     && unzip opentelemetry-webserver-sdk-x64-linux.tgz.zip \
     && tar xvfz opentelemetry-webserver-sdk-x64-linux.tgz \
     && rm opentelemetry-webserver-sdk-x64-linux.tgz opentelemetry-webserver-sdk-x64-linux.tgz.zip \
@@ -22,4 +23,6 @@ ENV LD_LIBRARY_PATH=/opt/opentelemetry-webserver-sdk/sdk_lib/lib:$LD_LIBRARY_PAT
 
 RUN echo "load_module /opt/opentelemetry-webserver-sdk/WebServerModule/Nginx/ngx_http_opentelemetry_module.so;" >> /etc/nginx/nginx.conf
 
-COPY opentelemetry_module.conf /etc/nginx/conf.d/
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
