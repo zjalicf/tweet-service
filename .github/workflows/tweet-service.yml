@@ -1,1 +1,16 @@
-s
+name: Tweet service workflow
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'tweet_service/**'
+
+jobs:
+  deploy-tweet-service:
+    uses: ./.github/workflows/deploy.yml
+  x:
+    runs-on: ubuntu-latest
+    # steps:
+      # Additional step specific for this service
