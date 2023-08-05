@@ -10,7 +10,7 @@ on:
 jobs:
   deploy-user-service:
     uses: ./.github/workflows/deploy.yml
-  x:
-    runs-on: ubuntu-latest
+  # x:
+  #   runs-on: ubuntu-latest
     # steps:
       # Additional step specific for this service
