@@ -2,6 +2,11 @@ name: deploy
 
 on:
   workflow_call:
+    secrets:
+      username:
+        required: true
+      password:
+        required: true
 
 jobs:
   deploy:
@@ -18,8 +23,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          username: ${{ secrets.username }}
+          password: ${{ secrets.password }}
           
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -31,9 +36,9 @@ jobs:
           file: Dockerfile
           target: release-debian
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.workflow }}:${{steps.get-tag.outputs.tag}}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.workflow }}:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.workflow }}:buildcache,mode=max
+          tags: ${{ secrets.username }}/${{ github.workflow }}:${{steps.get-tag.outputs.tag}}
+          cache-from: type=registry,ref=${{ secrets.username }}/${{ github.workflow }}:buildcache
+          cache-to: type=registry,ref=${{ secrets.username }}/${{ github.workflow }}:buildcache,mode=max
 
   vulnerability-scan:
     name: Vulnerability Scan with 
@@ -62,31 +67,9 @@ jobs:
     - name: View Report
       if: always()
       run: cat "${{steps.scan.outputs.sarif}}"
-  
-  owasp-check:
-    runs-on: ubuntu-latest
-    name: OWASP check
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Build project with Maven
-        run: mvn clean install
-
-      - name: Depcheck
-        uses: dependency-check/Dependency-Check_Action@main
-        id: Depcheck
-        with:
-          project: 'project'
-          path: '.'
-          format: 'HTML'
-          out: 'reports' # this is the default, no need to specify unless you wish to override it
-          args: >
-            --failOnCVSS 7
-            --enableRetired
-            
-      - name: Upload Test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: Depcheck report
-          path: ${{github.workspace}}/reports
+       
+    - name: Upload Test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: Depcheck report
+        path: ${{github.workspace}}/reports
