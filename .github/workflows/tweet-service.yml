@@ -10,6 +10,9 @@ on:
 jobs:
   deploy-tweet-service:
     uses: ./.github/workflows/deploy.yml
+    secrets:
+      username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
   # x:
   #   runs-on: ubuntu-latest
     # steps:
