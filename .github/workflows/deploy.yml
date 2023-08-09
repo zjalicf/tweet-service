@@ -48,6 +48,11 @@ jobs:
     name: Vulnerability Scan with 
     runs-on: ubuntu-latest
     steps:
+    - name: Replace hyphens with underscore  
+      run: |
+          service_name="${{ inputs.service-name }}"
+          modified_service_name="${service_name//-/_}"
+          
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -61,7 +66,7 @@ jobs:
     
     - name: Print SBOM
       run: |
-        cat "./${{ inputs.service-name//-/_ }}"
+        cat "./$modified-service-name"
         cat "syft-sbom.json"
     
     - name: Scan SBOM
