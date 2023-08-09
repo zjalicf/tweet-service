@@ -1,7 +1,11 @@
-name: deploy
+name: Deploy
 
 on:
   workflow_call:
+    inputs:
+      service-name:
+        required: true
+        type: string
     secrets:
       username:
         required: true
@@ -36,9 +40,9 @@ jobs:
           file: Dockerfile
           target: release-debian
           push: true
-          tags: ${{ secrets.username }}/${{ github.workflow }}:${{steps.get-tag.outputs.tag}}
-          cache-from: type=registry,ref=${{ secrets.username }}/${{ github.workflow }}:buildcache
-          cache-to: type=registry,ref=${{ secrets.username }}/${{ github.workflow }}:buildcache,mode=max
+          tags: ${{ secrets.username }}/${{ inputs.service-name }}:${{steps.get-tag.outputs.tag}}
+          cache-from: type=registry,ref=${{ inputs.service-name }}/${{ inputs.service-name }}:buildcache
+          cache-to: type=registry,ref=${{ inputs.service-name }}/${{ inputs.service-name }}:buildcache,mode=max
 
   vulnerability-scan:
     name: Vulnerability Scan with 
@@ -50,13 +54,15 @@ jobs:
     - name: Create SBOM
       uses: anchore/scan-action@v3
       with:
-        path: "."
+        path: "./${{ inputs.service-name//-/_ }}"
         format: syft-json
         artifact-name: syft-sbom.json
         output-file: "syft-sbom.json"
     
     - name: Print SBOM
-      run: cat "syft-sbom.json"
+      run: |
+        cat "./${{ inputs.service-name//-/_ }}"
+        cat "syft-sbom.json"
     
     - name: Scan SBOM
       id: scan
