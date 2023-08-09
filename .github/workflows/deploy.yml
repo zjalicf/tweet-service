@@ -45,44 +45,35 @@ jobs:
           cache-to: type=registry,ref=${{ inputs.service-name }}/${{ inputs.service-name }}:buildcache,mode=max
 
   vulnerability-scan:
-    name: Vulnerability Scan with 
+    name: Vulnerability Scan
     runs-on: ubuntu-latest
     steps:
-    - name: Replace hyphens with underscores
-      id: modify-service-name
-      run: |
-        service_name="${{ inputs.service-name }}"
-        modified_service_name="${service_name//-/_}"
-        echo "::set-output name=modified-service-name::$modified_service_name"
-
-    - name: Checkout
-      uses: actions/checkout@v3
-
-    - name: Create SBOM
-      uses: anchore/scan-action@v3
-      with:
-        path: "./${{ steps.modify-service-name.outputs.modified-service-name }}"
-        format: syft-json
-        artifact-name: syft-sbom.json
-        output-file: "syft-sbom.json"
-    
-    - name: Print SBOM
-      run: |
-        cat "./${{ steps.modify-service-name.outputs.modified-service-name }}/syft-sbom.json"
-
-    
-    - name: Scan SBOM
-      id: scan
-      uses: anchore/scan-action@v3
-      with:
-        sbom: "./${{ steps.modify-service-name.outputs.modified-service-name }}/syft-sbom.json"
-    
-    - name: View Report
-      if: always()
-      run: cat "${{steps.scan.outputs.sarif}}"
-       
-    - name: Upload Test results
-      uses: actions/upload-artifact@v3
-      with:
-        name: Depcheck report
-        path: ${{github.workspace}}/reports
+      - name: Checkout
+        uses: actions/checkout@v2
+  
+      - name: Create SBOM
+        id: create-sbom
+        run: |
+          service_name="${{ inputs.service-name }}"
+          modified_service_name="${service_name//-/_}"
+          echo "::set-output name=modified-service-name::$modified_service_name"
+  
+      - name: Print SBOM
+        run: |
+          cat "${{ steps.create-sbom.outputs.modified-service-name }}/syft-sbom.json"
+  
+      - name: Scan SBOM
+        id: scan
+        uses: anchore/scan-action@v3
+        with:
+          sbom: "${{ steps.create-sbom.outputs.modified-service-name }}/syft-sbom.json"
+  
+      - name: View Report
+        if: always()
+        run: cat "${{ steps.scan.outputs.sarif }}"
+  
+      - name: Upload Test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: scan-results
+          path: "${{ steps.create-sbom.outputs.modified-service-name }}/syft-sbom.json"
