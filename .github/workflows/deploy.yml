@@ -48,32 +48,34 @@ jobs:
     name: Vulnerability Scan with 
     runs-on: ubuntu-latest
     steps:
-    - name: Replace hyphens with underscore  
+    - name: Replace hyphens with underscores
+      id: modify-service-name
       run: |
-          service_name="${{ inputs.service-name }}"
-          modified_service_name="${service_name//-/_}"
-          
+        service_name="${{ inputs.service-name }}"
+        modified_service_name="${service_name//-/_}"
+        echo "::set-output name=modified-service-name::$modified_service_name"
+
     - name: Checkout
       uses: actions/checkout@v3
 
     - name: Create SBOM
       uses: anchore/scan-action@v3
       with:
-        path: "./$modified-service-name"
+        path: "./${{ steps.modify-service-name.outputs.modified-service-name }}"
         format: syft-json
         artifact-name: syft-sbom.json
         output-file: "syft-sbom.json"
     
     - name: Print SBOM
       run: |
-        cat "./$modified-service-name"
-        cat "syft-sbom.json"
+        cat "./${{ steps.modify-service-name.outputs.modified-service-name }}/syft-sbom.json"
+
     
     - name: Scan SBOM
       id: scan
       uses: anchore/scan-action@v3
       with:
-        sbom: "syft-sbom.json"
+        sbom: "./${{ steps.modify-service-name.outputs.modified-service-name }}/syft-sbom.json"
     
     - name: View Report
       if: always()
