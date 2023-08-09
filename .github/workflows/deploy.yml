@@ -38,8 +38,8 @@ jobs:
 
       - name: Set image name
         id: get-image-name
-        run: echo "image-name=${{ secrets.username }}/${{ inputs.service-name }}:${{steps.get-tag.outputs.tag}}" >> $GITHUB_OUTPUT
-        
+        run: echo "image-name=${{ secrets.username }}/${{ inputs.service-name }}:${{ needs.deploy.outputs.get-tag }}" >> $GITHUB_OUTPUT
+                
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
