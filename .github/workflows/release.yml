@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
+  # vulnebilirty check
   release:
     name: Release
     runs-on: ubuntu-latest
