@@ -59,7 +59,7 @@ jobs:
     - name: Create SBOM
       uses: anchore/scan-action@v3
       with:
-        path: "./${{ inputs.service-name//-/_ }}"
+        path: "./$modified-service-name"
         format: syft-json
         artifact-name: syft-sbom.json
         output-file: "syft-sbom.json"
