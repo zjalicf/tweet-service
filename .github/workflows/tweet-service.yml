@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'tweet_service/**'
+    tags:
+      - 'v*'
 
 jobs:
   deploy-tweet-service:

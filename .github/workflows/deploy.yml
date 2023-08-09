@@ -42,7 +42,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./${{ inputs.service-name }}
           file: Dockerfile
           target: release-debian
           push: true
