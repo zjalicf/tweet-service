@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-    paths:
-      - 'tweet_service/**'
 
 jobs:
   test:
@@ -24,7 +22,7 @@ jobs:
         uses: jidicula/go-fuzz-action@v1.2.0
         with:
           fuzz-time: 30s
-          packages: './*'
+          packages: './...'
 
       # - name: Docker for newman
       #   run: |
