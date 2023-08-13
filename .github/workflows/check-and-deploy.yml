@@ -18,15 +18,15 @@ jobs:
         with:
           go-version: '>=1.17.0'
 
-      - name: Fuzz test
-        uses: jidicula/go-fuzz-action@v1.2.0
-        with:
-          fuzz-time: 30s
-          packages: './domain'
+      # - name: Fuzz test
+      #   uses: jidicula/go-fuzz-action@v1.2.0
+      #   with:
+      #     fuzz-time: 30s
+      #     packages: './...'
 
-      # - name: Docker for newman
-      #   run: |
-      #     docker run -v $(pwd)/tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli"
+      - name: Docker for newman
+        run: |
+          docker run -v $(pwd)/tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli"
       
 
   # deploy:
