@@ -18,7 +18,7 @@ func GetRedisClient(host, port string) (*redis.Client, error) {
 	if err != nil {
 		log.Printf("failed to ping cache db because of: %s ", err)
 		// log.Print("hi")
-		log.Printf("change6")
+		log.Printf("change7")
 		return nil, err
 	}
 
