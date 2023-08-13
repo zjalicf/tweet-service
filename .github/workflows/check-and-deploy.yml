@@ -28,6 +28,17 @@ jobs:
         run: |
           docker run -v $(pwd)/api-tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
       
+      - name: Install Syft and Grype
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Generate SBOM with Syft
+        run: syft packages -o json > sbom.json
+
+      - name: Scan SBOM with Grype
+        run: grype sbom:sbom.json
+      
 
   # deploy:
   #   name: Deployment
