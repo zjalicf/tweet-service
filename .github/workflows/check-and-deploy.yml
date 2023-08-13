@@ -34,7 +34,10 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
 
       - name: Generate SBOM with Syft
-        run: syft packages -o json > sbom.json
+        run: |
+          docker build -t test-image:latest .
+          docker image save test-image:latest -o test-image.tar
+          syft packages dir:/test-image.tar -o json > sbom.json
 
       - name: Scan SBOM with Grype
         run: grype sbom:sbom.json
