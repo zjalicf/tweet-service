@@ -1,6 +1,6 @@
 FROM golang:latest as builder
 WORKDIR /app
-COPY ./tweet_service/go.mod ./tweet_service/go.sum ./
+COPY ./go.mod ./go.sum ./
 RUN go mod download
 COPY ./ .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
