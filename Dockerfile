@@ -1,11 +1,11 @@
-FROM golang:alpine AS builder
+FROM golang:alpine AS build
 WORKDIR /app
 COPY . .
 RUN go mod download && go mod verify
-RUN go build -v -o /app/bin/app .
+RUN go build -v -o /app .
 
 FROM gcr.io/distroless/base-debian11 as release-debian
-WORKDIR /root/
-COPY --from=builder /app/main .
+WORKDIR /
+COPY --from=build /app /app
 EXPOSE 8000
-CMD ["./main"]
+CMD ["/app"]
