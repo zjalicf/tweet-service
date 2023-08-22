@@ -6,8 +6,9 @@ import (
 	"log"
 	"os"
 	"time"
-	"tweet_service/domain"
-	"tweet_service/errors"
+	"tweet-service/domain"
+	"tweet-service/errors"
+
 	"github.com/gocql/gocql"
 	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel/trace"
@@ -197,7 +198,6 @@ func (sr *TweetRepo) GetPostsFeedByUser(ctx context.Context, usernames []string)
 	query := sr.session.Query(`SELECT * FROM tweets_by_user WHERE username IN ? ORDER BY created_at DESC`, usernames)
 
 	sr.logging.Infoln("Store: getFeed reached")
-
 
 	query.PageSize(0)
 	scanner := query.Iter().Scanner()

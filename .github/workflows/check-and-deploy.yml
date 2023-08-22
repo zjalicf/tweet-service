@@ -45,11 +45,9 @@ jobs:
           image: "localbuild/testimage:latest"
           fail-build: false
 
-      - name: Inspect action SARIF report
-        run: cat ${{ steps.scan.outputs.sarif }}
-
   deploy:
     name: Deployment
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

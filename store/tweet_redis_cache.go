@@ -2,11 +2,12 @@ package store
 
 import (
 	"context"
-	"github.com/go-redis/redis"
-	"go.opentelemetry.io/otel/trace"
 	"log"
 	"time"
-	"tweet_service/domain"
+	"tweet-service/domain"
+
+	"github.com/go-redis/redis"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type TweetRedisCache struct {

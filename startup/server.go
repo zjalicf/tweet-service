@@ -3,6 +3,20 @@ package startup
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+	"tweet-service/application"
+	application2 "tweet-service/application"
+	"tweet-service/domain"
+	"tweet-service/handlers"
+	"tweet-service/startup/config"
+	"tweet-service/store"
+	store2 "tweet-service/store"
+
 	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
@@ -14,19 +28,6 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
 	"go.opentelemetry.io/otel/trace"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-	"tweet_service/application"
-	application2 "tweet_service/application"
-	"tweet_service/domain"
-	"tweet_service/handlers"
-	"tweet_service/startup/config"
-	"tweet_service/store"
-	store2 "tweet_service/store"
 )
 
 var Logger = logrus.New()
@@ -36,7 +37,7 @@ type Server struct {
 }
 
 const (
-	QueueGroup  = "tweet_service"
+	QueueGroup  = "tweet-service"
 	LogFilePath = "/app/logs/application.log"
 )
 
@@ -96,7 +97,7 @@ func (server *Server) Start() {
 	tp := newTraceProvider(exp)
 	defer func() { _ = tp.Shutdown(ctx) }()
 	otel.SetTracerProvider(tp)
-	tracer := tp.Tracer("tweet_service")
+	tracer := tp.Tracer("tweet-service")
 
 	redisClient := server.initRedisClient()
 	tweetCache := server.initTweetCache(redisClient, tracer)
@@ -166,7 +167,7 @@ func (server *Server) initSubscriber(subject string, queueGroup string) saga.Sub
 func (server *Server) initCreateEventOrchestrator(publisher saga.Publisher, subscriber saga.Subscriber, tracer trace.Tracer) *application.CreateEventOrchestrator {
 	orchestrator, err := application.NewCreateEventOrchestrator(publisher, subscriber, tracer)
 	if err != nil {
-		log.Fatalf("Error in server of report_service, line 182: %s", err.Error())
+		log.Fatalf("Error in server of report-service, line 182: %s", err.Error())
 	}
 	return orchestrator
 }
@@ -216,7 +217,7 @@ func newTraceProvider(exp sdktrace.SpanExporter) *sdktrace.TracerProvider {
 		resource.Default(),
 		resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("tweet_service"),
+			semconv.ServiceNameKey.String("tweet-service"),
 		),
 	)
 

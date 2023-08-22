@@ -1,4 +1,4 @@
-module tweet_service
+module tweet-service
 
 go 1.18
 

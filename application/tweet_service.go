@@ -9,7 +9,8 @@ import (
 	"net/http"
 	"os"
 	"time"
-	"tweet_service/domain"
+	"tweet-service/domain"
+
 	"github.com/gocql/gocql"
 	"github.com/sirupsen/logrus"
 	"github.com/sony/gobreaker"
@@ -38,7 +39,7 @@ func NewTweetService(store domain.TweetStore, cache domain.TweetCache, tracer tr
 		cb:           CircuitBreaker(),
 		orchestrator: orchestrator,
 		tracer:       tracer,
-		logging: logging,
+		logging:      logging,
 	}
 }
 

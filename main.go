@@ -1,8 +1,8 @@
 package main
 
 import (
-	"tweet_service/startup"
-	cfg "tweet_service/startup/config"
+	"tweet-service/startup"
+	cfg "tweet-service/startup/config"
 )
 
 func main() {

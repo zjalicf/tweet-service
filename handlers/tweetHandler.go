@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"tweet_service/application"
-	"tweet_service/authorization"
-	"tweet_service/domain"
+	"tweet-service/application"
+	"tweet-service/authorization"
+	"tweet-service/domain"
 
 	"github.com/casbin/casbin"
 	"github.com/cristalhq/jwt/v4"
@@ -30,7 +30,7 @@ type TweetHandler struct {
 var jwtKey = []byte(os.Getenv("SECRET_KEY"))
 var verifier, _ = jwt.NewVerifierHS(jwt.HS256, jwtKey)
 
-func NewTweetHandler(service *application.TweetService, tracer trace.Tracer,  logging *logrus.Logger) *TweetHandler {
+func NewTweetHandler(service *application.TweetService, tracer trace.Tracer, logging *logrus.Logger) *TweetHandler {
 	return &TweetHandler{
 		service: service,
 		tracer:  tracer,

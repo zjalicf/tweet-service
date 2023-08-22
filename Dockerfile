@@ -1,11 +1,10 @@
-FROM golang:latest as builder
+FROM golang:alpine AS build
 WORKDIR /app
-COPY ./go.mod ./go.sum ./
-RUN go mod download
-COPY ./ .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+COPY . .
+RUN go mod download && go mod verify
+RUN go build -v -o /app/bin/app .
 
-FROM alpine:latest
+FROM gcr.io/distroless/base-debian11 as release-debian
 WORKDIR /root/
 COPY --from=builder /app/main .
 EXPOSE 8000
