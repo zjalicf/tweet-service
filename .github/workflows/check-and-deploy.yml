@@ -46,24 +46,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+          
       - name: Create SBOM
-        id: sbom
         uses: anchore/sbom-action@v0
         with:
-          image: "localbuild/testimage:latest"
           format: spdx-json
-          output-file: "${{ github.event.repository.name }}-sbom.spdx.json"
-
-      - name: Download SBOM
-        uses: actions/download-artifact@v3
-        with:
-          name: sbom
-          path: ${{ steps.sbom.outputs.sbom }}
-          
-      - name: Display structure of downloaded SBOM files
-        run: ls -R
-        working-directory: ${{ steps.sbom.outputs.sbom }}
+          output-file: "sbom.spdx.json"
 
   deploy:
     name: Deployment
