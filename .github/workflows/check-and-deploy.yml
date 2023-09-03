@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
 
       - name: Setup Go
         uses: actions/setup-go@v4
@@ -51,12 +54,16 @@ jobs:
           image: "localbuild/testimage:latest"
           format: spdx-json
           output-file: "${{ github.event.repository.name }}-sbom.spdx.json"
-      
-      - name: Upload SBOM as an artifact
-        uses: actions/upload-artifact@v2
+
+      - name: Download SBOM
+        uses: actions/download-artifact@v3
         with:
           name: sbom
           path: ${{ steps.sbom.outputs.sbom }}
+          
+      - name: Display structure of downloaded SBOM files
+        run: ls -R
+        working-directory: ${{ steps.sbom.outputs.sbom }}
 
   deploy:
     name: Deployment
