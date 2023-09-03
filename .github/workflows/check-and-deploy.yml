@@ -37,13 +37,19 @@ jobs:
           tags: localbuild/testimage:latest
           push: false
           load: true
-      
-      - name: Scan image
-        id: scan
-        uses: anchore/scan-action@v3
-        with:
-          image: "localbuild/testimage:latest"
-          fail-build: false
+          
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # - name: Scan image
+      #   id: scan
+      #   uses: anchore/scan-action@v3
+      #   with:
+      #     image: "localbuild/testimage:latest"
+      #     fail-build: false
 
   deploy:
     name: Deployment
