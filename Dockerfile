@@ -8,4 +8,5 @@ FROM gcr.io/distroless/base-debian11 as release-debian
 WORKDIR /
 COPY --from=build /app /app
 EXPOSE 8000
+USER nonroot:nonroot
 CMD ["/app"]
