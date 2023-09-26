@@ -26,10 +26,6 @@ jobs:
 
       - name: Go Unit test
         run: go test -v ./tests
-
-      - name: Docker for newman
-        run: |
-          docker run -p 8000:8000 -v $(pwd)/api-tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -40,6 +36,12 @@ jobs:
           tags: localbuild/testimage:latest
           push: false
           load: true
+
+      - name: Run test image for API testing
+        run: docker run -p 8000:8000 testimage:latest
+        
+      - name: Newman testing
+        run: docker run -v $(pwd)/api-tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
           
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
