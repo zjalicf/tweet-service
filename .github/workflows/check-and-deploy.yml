@@ -30,15 +30,8 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         
-      - name: Build local container
-        uses: docker/build-push-action@v5
-        with:
-          tags: localbuild/testimage:latest
-          push: false
-          load: true
-
-      - name: Run test image for API testing
-        run: docker run -p 8000:8000 testimage:latest
+      - name: Build and run local container
+        run: docker build -t testimage . && docker run -p 8000:8000 -d testimage
         
       - name: Newman testing
         run: docker run -v $(pwd)/api-tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
