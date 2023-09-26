@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build and run local container
-        run: docker build -t testimage . && docker run -p 8000:8000 -d testimage
+        run: docker build -t testimage . && docker run -p 10000:10000 -d testimage
           
       - name: Docker for newman
         run: |
