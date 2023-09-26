@@ -19,12 +19,9 @@ jobs:
         with:          
           fetch-depth: 0
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
-
       - name: Build and run local container
         run: docker build -t testimage . && docker run -p 8000:8000 -d testimage
           
       - name: Docker for newman
         run: |
-          docker run -v $(pwd)/api-tests2:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
+          docker run -v $(pwd)/api-tests2:/etc/newman -t postman/newman:latest run "test.json" --reporters="cli" -x
