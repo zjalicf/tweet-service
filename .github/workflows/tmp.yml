@@ -1,1 +1,4 @@
 
+      - name: Docker for newman
+        run: |
+          docker run -v $(pwd)/api-tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
