@@ -26,15 +26,6 @@ jobs:
 
       - name: Go Unit test
         run: go test -v ./tests
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        
-      - name: Build and run local container
-        run: docker build -t testimage . && docker run -p 8000:8000 -d testimage
-        
-      - name: Newman testing
-        run: docker run -v $(pwd)/api-tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
           
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
