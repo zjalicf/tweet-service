@@ -1,0 +1,27 @@
+{
+	"info": {
+		"_postman_id": "d230fedb-c8a6-4541-8f4a-97364217bce6",
+		"name": "Twitter-Clone2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20821043"
+	},
+	"item": [
+		{
+			"name": "Tweet",
+			"item": [
+				{
+					"name": "GetTweetsForUserByUsername",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/hi",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10000"
+						}
+					},
+					"response": []
+				},
