@@ -10,4 +10,4 @@ COPY --from=build /app /app
 RUN chmod +x /app
 EXPOSE 8000
 USER nonroot:nonroot
-CMD ["/app"]
+ENTRYPOINT ["/app"]
