@@ -11,7 +11,7 @@ func hello(w http.ResponseWriter, _ *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", hello)
+	http.HandleFunc("/hi", hello)
 
 	port := "10000"
 
