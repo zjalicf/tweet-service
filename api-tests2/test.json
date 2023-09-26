@@ -20,7 +20,10 @@
 							"host": [
 								"localhost"
 							],
-							"port": "10000"
+							"port": "10000",
+							"path": [
+								"hi"
+							]
 						}
 					},
 					"response": []
