@@ -1,4 +1,30 @@
+name: Check and deploy
 
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+  
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:          
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+
+      - name: Build and run local container
+        run: docker build -t testimage . && docker run -p 8000:8000 -d testimage
+          
       - name: Docker for newman
         run: |
-          docker run -v $(pwd)/api-tests:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
+          docker run -v $(pwd)/api-tests2:/etc/newman -t postman/newman:latest run "tests.json" --reporters="cli" -x
