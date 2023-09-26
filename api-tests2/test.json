@@ -10,7 +10,7 @@
 			"name": "Tweet",
 			"item": [
 				{
-					"name": "GetTweetsForUserByUsername",
+					"name": "hi",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -24,4 +24,6 @@
 						}
 					},
 					"response": []
-				},
+		}]
+	}]
+}
