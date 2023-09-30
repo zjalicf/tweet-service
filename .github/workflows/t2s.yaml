@@ -17,9 +17,6 @@ jobs:
         with:          
           fetch-depth: 0
 
-      - name: Build and run local container
-        run: docker build -t testimage . && docker run -p 10000:10000 -d testimage
-
       - name: Docker for newman
         run: |
           docker run -v $(pwd)/api-tests2:/etc/newman -t postman/newman:latest run "test.json" --reporters="cli" -x
