@@ -15,7 +15,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://www.hello-world.com",
+							"raw": "hello-world.com",
 							"protocol": "https"
 						}
 					},
