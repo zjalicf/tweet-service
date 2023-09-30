@@ -1,13 +1,13 @@
 {
 	"info": {
 		"_postman_id": "d230fedb-c8a6-4541-8f4a-97364217bce6",
-		"name": "Twitter-Clone2",
+		"name": "x22",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20821043"
 	},
 	"item": [
 		{
-			"name": "Tweet",
+			"name": "safasf",
 			"item": [
 				{
 					"name": "hi",
@@ -15,15 +15,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:10000/hi",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "10000",
-							"path": [
-								"hi"
-							]
+							"raw": "https://www.hello-world.com",
+							"protocol": "https",
 						}
 					},
 					"response": []
