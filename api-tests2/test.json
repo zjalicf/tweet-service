@@ -16,7 +16,7 @@
 						"header": [],
 						"url": {
 							"raw": "https://www.hello-world.com",
-							"protocol": "https",
+							"protocol": "https"
 						}
 					},
 					"response": []
