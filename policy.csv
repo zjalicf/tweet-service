@@ -4,7 +4,7 @@ p, Regular, /getOneTweet/*, GET
 p, Business, /getOneTweet/*, GET
 p, Regular, /user/*, GET
 p, Regular, /favorite, POST
-p, Regular, /whoLiked/*, GET
+p, Regular, /who/*, GET
 p, Business, /, POST
 p, Business, /, GET
 p, Business, /user/*, GET
